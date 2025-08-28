@@ -4,8 +4,8 @@ import { ethers } from 'ethers';
 
 dotenv.config();
 
-const WALLET_MNEMONIC = process.env.WALLET_MNEMONIC;
-if (!WALLET_MNEMONIC) throw new Error('WALLET_MNEMONIC is not set');
+const SEED_PHRASE = process.env.SEED_PHRASE;
+if (!SEED_PHRASE) throw new Error('SEED_PHRASE is not set');
 
 /* -------------------------------------------------------------------------- */
 /*                                   Cardano                                  */
@@ -26,7 +26,7 @@ export const wallet = new MeshWallet({
   networkId: BLOCKFROST_NETWORK === 'mainnet' ? 1 : 0,
   fetcher: blockfrostProvider,
   submitter: blockfrostProvider,
-  key: { type: 'mnemonic' as const, words: WALLET_MNEMONIC.split(' ') },
+  key: { type: 'mnemonic' as const, words: SEED_PHRASE.split(' ') },
 });
 export const cardanoAddress = await wallet.getChangeAddress();
 console.log('Cardano address: ', cardanoAddress);
@@ -56,5 +56,5 @@ if (!ALCHEMY_API_KEY) throw new Error('ALCHEMY_API_KEY is not set');
 const rpcUrl = `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
 export const ethProvider = new ethers.JsonRpcProvider(rpcUrl);
 
-export const ethWallet = ethers.Wallet.fromPhrase(WALLET_MNEMONIC, ethProvider);
+export const ethWallet = ethers.Wallet.fromPhrase(SEED_PHRASE, ethProvider);
 console.log('Ethereum address: ', ethWallet.address);
